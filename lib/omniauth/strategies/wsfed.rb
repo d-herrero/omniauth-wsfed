@@ -2,7 +2,6 @@ require 'omniauth'
 
 module OmniAuth
   module Strategies
-
     class WSFed
       include OmniAuth::Strategy
 
@@ -17,7 +16,7 @@ module OmniAuth
       WS_TRUST    = 'http://schemas.xmlsoap.org/ws/2005/02/trust'
       WS_POLICY   = 'http://schemas.xmlsoap.org/ws/2004/09/policy'
 
-      # Issues passive WS-Federation redirect for authentication...
+      # Issues passive WS-Federation redirect for authentication.
       def request_phase
         settings = options.dup
         settings[:reply] ||= callback_url
@@ -25,23 +24,24 @@ module OmniAuth
         redirect(auth_request.redirect_url)
       end
 
-      # Parse SAML token...
+      # Parse SAML token.
       def callback_phase
         begin
           validate_callback_params(@request)
 
           wsfed_callback = request.params[response_param]
+          wsfed_callback = Base64.decode64(wsfed_callback) if options[:response_in_base64]
 
           signed_document = OmniAuth::Strategies::WSFed::XMLSecurity::SignedDocument.new(wsfed_callback, options)
           signed_document.validate(get_fingerprint, false)
 
-          auth_callback   = OmniAuth::Strategies::WSFed::AuthCallback.new(wsfed_callback, options)
-          validator       = OmniAuth::Strategies::WSFed::AuthCallbackValidator.new(auth_callback, options)
+          auth_callback = OmniAuth::Strategies::WSFed::AuthCallback.new(wsfed_callback, options)
+          validator     = OmniAuth::Strategies::WSFed::AuthCallbackValidator.new(auth_callback, options)
 
           validator.validate!
 
-          @name_id  = auth_callback.name_id
-          @claims   = auth_callback.attributes
+          @name_id = auth_callback.name_id
+          @claims  = auth_callback.attributes
 
           super
 
@@ -53,7 +53,7 @@ module OmniAuth
 
       end
 
-      # OmniAuth DSL methods...
+      # OmniAuth DSL methods.
       uid   { @name_id }
       info  { @claims }
       extra { { response_param => request.params[response_param] } }
@@ -78,7 +78,6 @@ module OmniAuth
           raise OmniAuth::Strategies::WSFed::ValidationError.new("AuthN token (#{response_param}) missing in callback.")
         end
       end
-
     end
   end
 end

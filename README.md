@@ -44,7 +44,8 @@ use OmniAuth::Strategies::WSFed,
   :reply                 => "http://localhost:3000/auth/wsfed/callback",
   :id_claim              => "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
   :idp_cert_fingerprint  => "FC96D2983…",
-  :response_param        => "wresult"
+  :response_param        => "wresult",
+  :response_in_base64    => true
 ```
 
 or in your Rails application:
@@ -67,7 +68,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     :reply                 => "http://localhost:3000/auth/wsfed/callback",
     :id_claim              => "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
     :idp_cert_fingerprint  => "FC96D2983…",
-    :response_param        => "wresult"
+    :response_param        => "wresult",
+    :response_in_base64    => true
 
 end
 ```
@@ -99,6 +101,8 @@ posted. Defaults to the OmniAuth callback URL. **Optional**
 * `:saml_version` - The version of SAML tokens. **Defaults to 2**.
 
 * `:response_param` - The name of the param sent by the auth provider. **Defaults to "wresult"**.
+
+* `:response_in_base64` - Defines if the response is in Base64 and has to be decoded. **Defaults to "false"**.
 
 
 ## Authors and Credits ##
