@@ -5,9 +5,7 @@ require 'rexml/xpath'
 module OmniAuth
   module Strategies
     class WSFed
-
       class AuthCallback
-
         WS_UTILITY  = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd'
 
         attr_accessor :options, :raw_callback, :settings
@@ -97,9 +95,7 @@ module OmniAuth
             REXML::XPath.first(document, '//t:RequestSecurityTokenResponse/t:Lifetime', { 't' => WS_TRUST })
           end
         end
-
       end
-
     end
   end
 end

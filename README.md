@@ -38,14 +38,15 @@ Use the WSFed strategy as a middleware in your application:
 require 'omniauth'
 
 use OmniAuth::Strategies::WSFed,
-  :issuer_name           => "http://your-azure-acs-namespace.accesscontrol.windows.net",
-  :issuer                => "https://your-azure-acs-namespace.accesscontrol.windows.net/v2/wsfederation",
-  :realm                 => "http://my.relyingparty/realm",
-  :reply                 => "http://localhost:3000/auth/wsfed/callback",
-  :id_claim              => "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
-  :idp_cert_fingerprint  => "FC96D2983…",
-  :response_param        => "wresult",
-  :response_in_base64    => true
+  :issuer_name              => "http://your-azure-acs-namespace.accesscontrol.windows.net",
+  :issuer                   => "https://your-azure-acs-namespace.accesscontrol.windows.net/v2/wsfederation",
+  :realm                    => "http://my.relyingparty/realm",
+  :reply                    => "http://localhost:3000/auth/wsfed/callback",
+  :id_claim                 => "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+  :idp_cert_fingerprint     => "FC96D2983…",
+  :response_param           => "wresult",
+  :response_in_base64       => true,
+  :response_elements_prefix => "ds"
 ```
 
 or in your Rails application:
@@ -62,14 +63,15 @@ and in `config/initializers/omniauth.rb`:
 Rails.application.config.middleware.use OmniAuth::Builder do
 
   provider :wsfed,
-    :issuer_name           => "http://your-azure-acs-namespace.accesscontrol.windows.net",
-    :issuer                => "https://your-azure-acs-namespace.accesscontrol.windows.net/v2/wsfederation",
-    :realm                 => "http://my.relyingparty/realm",
-    :reply                 => "http://localhost:3000/auth/wsfed/callback",
-    :id_claim              => "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
-    :idp_cert_fingerprint  => "FC96D2983…",
-    :response_param        => "wresult",
-    :response_in_base64    => true
+    :issuer_name              => "http://your-azure-acs-namespace.accesscontrol.windows.net",
+    :issuer                   => "https://your-azure-acs-namespace.accesscontrol.windows.net/v2/wsfederation",
+    :realm                    => "http://my.relyingparty/realm",
+    :reply                    => "http://localhost:3000/auth/wsfed/callback",
+    :id_claim                 => "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+    :idp_cert_fingerprint     => "FC96D2983…",
+    :response_param           => "wresult",
+    :response_in_base64       => true,
+    :response_elements_prefix => "ds"
 
 end
 ```
@@ -103,6 +105,8 @@ posted. Defaults to the OmniAuth callback URL. **Optional**
 * `:response_param` - The name of the param sent by the auth provider. **Defaults to "wresult"**.
 
 * `:response_in_base64` - Defines if the response is in Base64 and has to be decoded. **Defaults to "false"**.
+
+* `:response_elements_prefix` - Prefix used in the response to mark references and types. It usually is "ds" or "dsig". **Defaults to "ds"**.
 
 
 ## Authors and Credits ##
