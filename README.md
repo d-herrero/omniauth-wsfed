@@ -43,7 +43,8 @@ use OmniAuth::Strategies::WSFed,
   :realm                 => "http://my.relyingparty/realm",
   :reply                 => "http://localhost:3000/auth/wsfed/callback",
   :id_claim              => "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
-  :idp_cert_fingerprint  => "FC96D2983…"
+  :idp_cert_fingerprint  => "FC96D2983…",
+  :response_param        => "wresult"
 ```
 
 or in your Rails application:
@@ -65,7 +66,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     :realm                 => "http://my.relyingparty/realm",
     :reply                 => "http://localhost:3000/auth/wsfed/callback",
     :id_claim              => "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
-    :idp_cert_fingerprint  => "FC96D2983…"
+    :idp_cert_fingerprint  => "FC96D2983…",
+    :response_param        => "wresult"
 
 end
 ```
@@ -95,6 +97,8 @@ posted. Defaults to the OmniAuth callback URL. **Optional**
 **uid** property.
 
 * `:saml_version` - The version of SAML tokens. **Defaults to 2**.
+
+* `:response_param` - The name of the param sent by the auth provider. **Defaults to "wresult"**.
 
 
 ## Authors and Credits ##
