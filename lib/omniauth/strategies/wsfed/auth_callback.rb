@@ -36,11 +36,25 @@ module OmniAuth
         end
 
         def created_at
-          Time.parse(REXML::XPath.first(wstrust_lifetime, '//wsu:Created', { 'wsu' => WS_UTILITY }).text)
+          wstrust_lifetime_creation = REXML::XPath.first(wstrust_lifetime, '//wsu:Created', { 'wsu' => WS_UTILITY })
+
+          if wstrust_lifetime_creation
+            Time.parse(data_created_at.text)
+          else
+            # If no creation TS is found, we asume it was created just now.
+            Time.now.utc
+          end
         end
 
         def expires_at
-          Time.parse(REXML::XPath.first(wstrust_lifetime, '//wsu:Expires', { 'wsu' => WS_UTILITY }).text)
+          wstrust_lifetime_expiration = REXML::XPath.first(wstrust_lifetime, '//wsu:Expires', { 'wsu' => WS_UTILITY })
+
+          if wstrust_lifetime_expiration
+            Time.parse(wstrust_lifetime_expiration.text)
+          else
+            # If no expiration TS is found, we asume is going to be valid forever.
+            Time.now.utc + 100.years
+          end
         end
 
 
