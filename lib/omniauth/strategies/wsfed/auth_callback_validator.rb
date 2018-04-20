@@ -1,10 +1,9 @@
 module OmniAuth
   module Strategies
     class WSFed
-
       class AuthCallbackValidator
-
-        attr_accessor :auth_callback, :wsfed_settings
+        attr_accessor :auth_callback,
+                      :wsfed_settings
 
         ISSUER_MISMATCH     = 'AuthN token issuer does not match configured issuer.'
         AUDIENCE_MISMATCH   = 'AuthN token audience does not match configured realm.'
@@ -28,34 +27,45 @@ module OmniAuth
         end
 
         def validate_issuer!
-          raise OmniAuth::Strategies::WSFed::ValidationError.new(ISSUER_MISMATCH) unless
-              auth_callback.issuer == wsfed_settings[:issuer_name]
+          unless auth_callback.issuer == wsfed_settings[:issuer_name]
+            Rails.logger.debug "[OmniAuth::Strategies::WSFed::ValidationError] ISSUER_MISMATCH error. auth_callback.issuer: #{auth_callback.issuer}. wsfed_settings[:issuer_name]: #{wsfed_settings[:issuer_name]}"
+
+            raise OmniAuth::Strategies::WSFed::ValidationError.new(ISSUER_MISMATCH)
+          end
         end
 
         def validate_audience!
-          raise OmniAuth::Strategies::WSFed::ValidationError.new(AUDIENCE_MISMATCH) unless
-              auth_callback.audience == wsfed_settings[:realm]
+          unless auth_callback.audience == wsfed_settings[:realm]
+            Rails.logger.debug "[OmniAuth::Strategies::WSFed::ValidationError] AUDIENCE_MISMATCH error. auth_callback.audience: #{auth_callback.audience}. wsfed_settings[:realm]: #{wsfed_settings[:realm]}"
+
+            raise OmniAuth::Strategies::WSFed::ValidationError.new(AUDIENCE_MISMATCH)
+          end
         end
 
         def validate_token_expiration!
-          raise OmniAuth::Strategies::WSFed::ValidationError.new(TOKEN_EXPIRED) unless
-              auth_callback.expires_at > Time.now.utc
+          unless auth_callback.expires_at > Time.now.utc
+            Rails.logger.debug "[OmniAuth::Strategies::WSFed::ValidationError] TOKEN_EXPIRED error. auth_callback.expires_at: #{auth_callback.expires_at}. Time.now.utc: #{Time.now.utc}"
+
+            raise OmniAuth::Strategies::WSFed::ValidationError.new(TOKEN_EXPIRED)
+          end
         end
 
         def validate_claims!
-          if auth_callback.claims.nil? || auth_callback.claims.empty?
+          if auth_callback.claims.blank?
+            Rails.logger.debug "[OmniAuth::Strategies::WSFed::ValidationError] NO_CLAIMS error. auth_callback.claims: #{auth_callback.claims}"
+
             raise OmniAuth::Strategies::WSFed::ValidationError.new(NO_CLAIMS)
           end
         end
 
         def validate_uid!
-          if auth_callback.name_id.nil? || auth_callback.name_id.empty?
+          if auth_callback.name_id.blank?
+            Rails.logger.debug "[OmniAuth::Strategies::WSFed::ValidationError] NO_USER_IDENTIFIER error. auth_callback.name_id: #{auth_callback.name_id}"
+
             raise OmniAuth::Strategies::WSFed::ValidationError.new(NO_USER_IDENTIFIER)
           end
         end
-
       end
-
     end
   end
 end
