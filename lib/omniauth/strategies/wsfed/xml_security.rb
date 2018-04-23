@@ -43,14 +43,14 @@ module OmniAuth
           def initialize(response, settings = {})
             super(response)
 
-            extract_signed_element_id
-
             settings[:response_elements_prefix] ||= 'ds'
 
             self.settings = settings
+
+            extract_signed_element_id
           end
 
-          def validate(idp_cert_fingerprint, soft = true)
+          def validate(idp_cert_fingerprint, settings, soft = true)
             # get cert from response
             base64_cert = self.elements["//#{settings[:response_elements_prefix]}:X509Certificate"].text
             cert_text   = Base64.decode64(base64_cert)

@@ -33,7 +33,7 @@ module OmniAuth
           wsfed_callback = Base64.decode64(wsfed_callback) if options[:response_in_base64]
 
           signed_document = OmniAuth::Strategies::WSFed::XMLSecurity::SignedDocument.new(wsfed_callback, options)
-          signed_document.validate(get_fingerprint, false)
+          signed_document.validate(get_fingerprint, options, false)
 
           auth_callback = OmniAuth::Strategies::WSFed::AuthCallback.new(wsfed_callback, options)
           validator     = OmniAuth::Strategies::WSFed::AuthCallbackValidator.new(auth_callback, options)
