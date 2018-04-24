@@ -56,7 +56,7 @@ module OmniAuth
       # OmniAuth DSL methods.
       uid   { @name_id }
       info  { @claims }
-      extra { { response_param => request.params[response_param] } }
+      extra { { wresult: request.params[response_param] } }
 
     private
 
